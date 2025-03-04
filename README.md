@@ -1,5 +1,5 @@
-Aulas básicas de Python!!
+                          Aulas básicas de Python!!
 
-Listas, Funções, Tuplas e muito mais
+                    Listas, Funções, Tuplas e muito mais
 
-O código está todo comentando, fique livre para usar nos seus estudos!!
+      O código está todo comentando, fique livre para usar nos seus estudos!!
