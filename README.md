@@ -1,4 +1,3 @@
-
 # Introdução ao Python 
 
 Olá, seja bem-vind@ a introdução ao Python.
