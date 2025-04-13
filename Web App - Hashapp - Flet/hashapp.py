@@ -21,23 +21,34 @@ import flet as ft
 # criar a função principal (main) do app, é o nome padrão no uso do flet
 def main(pagina):
 # criar os elementos
-    titulo = ft.Text("Meu chat", size=35)
+    pagina.title = "Chat do Alex"
+    titulo = ft.Text("Meu chat", size=50, color="blue", weight=ft.FontWeight.BOLD)
+
+    def enviar_mensagem_tunel(mensagem):
+        texto_mensagem = mensagem
+        chat.controls.append(texto_mensagem)
+        pagina.update()
+
+    # websocket -> um "túnel" de comunicação, sempre utilizado em apps de mensagens
+    pagina.pubsub.subscribe(enviar_mensagem_tunel)
 
     
 
     def enviar_mensagem(evento):
-        texto_mensagem = ft.Text(campo_mensagem.value) # pega o texto que o usuário escreve no campo da mensagem
+        mensagem = ft.Text(f"{campo_nome.value}: {campo_mensagem.value}") # pega o texto que o usuário escreve no campo da mensagem
+        # enviar mensagem no túnel
+        pagina.pubsub.send_all(mensagem)
         campo_mensagem.value = ""
-        chat.controls.append(texto_mensagem) # acrescenta no chat
         pagina.update()
 
     # criando o padrão do chat
+
     campo_mensagem = ft.TextField(label="Escreva sua mensagem", on_submit=enviar_mensagem)
     botao_enviar = ft.ElevatedButton("Enviar mensagem", on_click=enviar_mensagem)
     chat = ft.Column()
     linha_mesagem = ft.Row([campo_mensagem, botao_enviar])
 
-
+    
     # criando funcioanlidade no botão entrar
     def entrar_chat(evento):
         # fechar o Dialog/popup
@@ -47,7 +58,12 @@ def main(pagina):
         pagina.remove(botao_iniciar)
 
         # criar chat
-        pagina.add(chat)
+        pagina.add(chat)  
+
+        #alguém entrou no chat
+        texto_entrou_chat = ft.Text(f"{campo_nome.value} entrou no chat!")
+        pagina.pubsub.send_all(texto_entrou_chat)
+
         # acrescentar o campo de mensagem e o botão enviar mensagem
         pagina.add(linha_mesagem)
         # atualiza a pag automaticamente
@@ -56,10 +72,8 @@ def main(pagina):
     campo_nome = ft.TextField(label="Digite seu nome", on_submit=entrar_chat) # área de texto
     botao_entrar = ft.ElevatedButton("Entrar no chat!", on_click=entrar_chat, bgcolor="red")
 
-
     # criando o popup/dialog
     titulo_janela = ft.Text("Bem vindo ao Chat")
-    
     janela = ft.AlertDialog(title=titulo_janela, content=campo_nome, actions=[botao_entrar], open=True)
 
     def abrir_popup(evento): # no flet é necessário passar o evento como parâmetro
@@ -73,4 +87,4 @@ def main(pagina):
     pagina.add(botao_iniciar)
 
 # rodar o seu app
-ft.app(main)
+ft.app(main, view=ft.WEB_BROWSER)
