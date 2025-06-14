@@ -15,3 +15,6 @@ class Cachorro:
 c = Cachorro('rocky', 'frenhcie', 'preto')
 c.latir()
 print(c.nome)
+# ele sempre vai executar e depois removar a instância no final.
+# caso queira que essa instÂcia seja deletada antes
+# digitar 'del e o nome da instância", nesse caso seria 'del c' 
